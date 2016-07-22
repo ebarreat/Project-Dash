@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block title%} {{ project.projectName }} Project {% endblock %}
+
+{% block body %}
+    <h2 class="genus-name">{{ project.projectName }}</h2>
+    <div class="sea-creature-container">
+        <div class="genus-details">
+            <dl class="genus-details-list">
+                <dt>description:</dt>
+                <dd>{{ project.projectDesc}}</dd>
+                <dt>Due Date:</dt>
+                <dt>Recent Notes</dt>
+                <dd>{{ recentNoteCount }}</dd>
+            </dl>
+        </div>
+    </div>
+    <div id="js-notes-wrapper"></div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.3/react.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.3/react-dom.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.23/browser.min.js"></script>
+    <script type="text/babel" src="{{ asset('js/notes.react.js') }}"></script>
+    <script type="text/babel">
+        var notesUrl = '{{ path('project_show_notes', {'name': project.projectName }) }}';
+        ReactDOM.render(
+        <NoteSection url={notesUrl} />,
+                document.getElementById('js-notes-wrapper')
+        );
+    </script>
+{% endblock %}

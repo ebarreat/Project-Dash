@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title 'Dashboard' %}
+
+{% block stylesheets %}
+ {{ parent() }}
+{% endblock %}
+
+{% block body %}
+    <h2>Projects</h2>
+        {% for project in projects %}
+        <div class="accordion">
+        <h3>{{ project.projectName }}</h3>
+        <div>
+            <ul class="navi">
+            <li>
+                <a href="project/{{ project.projectName }}">Visit Project</a>
+            </li>
+            </ul>
+            <ul>
+                <div class="progress">
+                    <div class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;">
+                        100%
+                    </div>
+                </div>
+            <dt><h4>Description</h4></dt>
+                <dd>{{ project.projectDesc }}</dd>
+            </ul>
+        </div>
+        </div>
+        {% endfor %}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+    $(function() {
+            $( ".accordion" ).accordion({collapsible: true , animate: 200});
+        });
+    </script>
+{% endblock %}

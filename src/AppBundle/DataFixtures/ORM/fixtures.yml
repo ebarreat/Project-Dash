@@ -1,0 +1,17 @@
+    project_{1..10}:
+        projectName: <project()>
+        projectDescription: <sentence()>
+AppBundle\Entity\GenusNote:
+      project.note_{1..100}:
+        username: <userName()>
+        userAvatarFilename: '50%? leanna.jpeg : ryan.jpeg'
+        note: <paragraph()>
+        createdAt: <dateTimeBetween('-6 months', 'now')>
+        genus: '@genus_*'
+AppBundle\Entity\SubFamily:
+    subfamily_{1..10}:
+        # use some fake data for this
+        name: <lastName()>
+AppBundle\Entity\User:
+    user_{1..10}:
+        username: ebarreat

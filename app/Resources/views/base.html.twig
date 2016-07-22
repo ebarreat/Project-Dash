@@ -1,13 +1,47 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8" />
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        {% block stylesheets %}{% endblock %}
-        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
-    </head>
-    <body>
-        {% block body %}{% endblock %}
-        {% block javascripts %}{% endblock %}
-    </body>
+<head>
+    <meta charset="utf-8">
+    <title>{% block title %}Project Dashboard{% endblock %}</title>
+    {% block stylesheets %}
+        <link rel="stylesheet" href="{{ asset('vendor/bootstrap/css/bootstrap.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
+        <link rel="stylesheet" href="{{ asset('vendor/fontawesome/css/font-awesome.min.css') }}">
+    {% endblock %}
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+</head>
+<body>
+<div class="search-bar">
+    <form method="GET" action="" class="js-sea-search sea-search">
+        <input type="search" name="q" placeholder="Search Projects" autocomplete="on" class="search-input">
+    </form>
+</div>
+<header class="header">
+    <img class="logo-icon" src="{{ asset('images/frazerlogo.png') }}">
+    <h1 class="logo">Dashboard</h1>
+    <ul class="navi">
+        <li class="search"><a href="#" class="js-header-search-toggle"><i class="fa fa-search"></i></a></li>
+        <li>
+            <a href="{{ path('security_login') }}">Login</a>
+            <a href="{{ path('app_dashboard_index') }}"> Home </a>
+            <a href="{{ path('app_dashboard_create') }}">Create New Project</a>
+        </li>
+    </ul>
+</header>
+{% for msg in app.session.flashBag.get('Hoorah!') %}
+    <div class="alert alert-success" role="alert">
+        {{ msg }}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    </div>
+{% endfor %}
+{% block body %}{% endblock %}
+<div class="footer">
+    <p class="footer-text">Made with <span class="heart"><3</span> Ebarreat</p>
+</div>
+{% block javascripts %}
+    <script   src="https://code.jquery.com/jquery-2.1.4.js"   integrity="sha256-siFczlgw4jULnUICcdm9gjQPZkw/YPDqhQ9+nAOScE4="   crossorigin="anonymous"></script>
+    <script   src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"   integrity="sha256-0YPKAwZP7Mp3ALMRVB2i8GXeEndvCq3eSl/WsAl1Ryk="   crossorigin="anonymous"></script>
+    <script src="{{ asset('js/main.js') }}"></script>
+{% endblock %}
+</body>
 </html>
