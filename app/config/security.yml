@@ -2,6 +2,11 @@
 # http://symfony.com/doc/current/book/security.html
 security:
 
+    encoders:
+        AppBundle\Entity\User:
+            algorithm: sha1
+            iterations: 1
+            encode_as_base64: false
     # http://symfony.com/doc/current/book/security.html#where-do-users-come-from-user-providers
     providers:
         our_users:
@@ -15,10 +20,17 @@ security:
 
         main:
             anonymous: ~
-
             guard:
               authenticators:
                 - app.security.login_form_authenticator
+            logout:
+                path: /logout
+
+
+    access_control:
+#        - { path: ^/project/new, roles: ROLE_ADMIN}
+
+
             # activate different ways to authenticate
 
             # http_basic: ~

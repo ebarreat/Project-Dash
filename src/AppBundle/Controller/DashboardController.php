@@ -7,6 +7,7 @@ use AppBundle\Entity\ProjectNote;
 use AppBundle\Form\ProjectFormType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\BrowserKit\Response;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
@@ -19,6 +20,7 @@ use Symfony\Component\HttpFoundation\Request;
 class DashboardController extends Controller{
 
   /**
+   * @Security("is_granted('ROLE_USER')")
    * @Route("/project/new" )
    * @return \Symfony\Component\HttpFoundation\Response
    */
@@ -44,16 +46,17 @@ class DashboardController extends Controller{
       $em->persist($project);
       $em->flush();
 
-      $this->addFlash('Hoorah!', 'Project has been created');
+      $this->addFlash('Hoorah!', sprintf('Project has been created by you %s!',$this->getUser()->getUsername()));
 
-      return $this->redirectToRoute('app_dashboard_index');
+      return $this->redirectToRoute('homepage');
     }
     return $this->render('dashboard/create.html.twig', array('projectForm' => $form->createView(),
     ));
   }
 
   /**
-   *  @Route("/")
+   * @Security("is_granted('ROLE_USER')")
+   *  @Route("/", name="homepage")
    * 
    */
   public function indexAction() {

@@ -6,6 +6,7 @@ use AppBundle\Form\LoginForm;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoder;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -17,11 +18,14 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator{
   private $formFactory;
   private $em;
   private $router;
+  private $passwordEncoder;
 
-  public function __construct(FormFactoryInterface $formFactory, EntityManager $em, RouterInterface $router) {
+  public function __construct(FormFactoryInterface $formFactory, EntityManager $em, RouterInterface $router, UserPasswordEncoder $passwordEncoder) {
     $this->formFactory = $formFactory;
     $this->em = $em;
     $this->router = $router;
+    $this->passwordEncoder = $passwordEncoder;
+
   }
 
   public function getCredentials(Request $request) {
@@ -29,14 +33,15 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator{
 
     if(!$isLoginSubmit){
       //skips Authentication
-
       return;
     }
+
     $form =$this->formFactory->create(LoginForm::class);
     $form->handleRequest($request);
 
     $data = $form->getData();
-    $request->getSession()->set(Security::LAST_USERNAME, $data['_username']);
+    $request->getSession()->set(
+      Security::LAST_USERNAME, $data['_username']);
 
     return $data;
   }
@@ -51,19 +56,19 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator{
   public function checkCredentials($credentials, UserInterface $user) {
     $password = $credentials['_password'];
 
-    if ($password == 'iliketurtles'){
+    if ($this->passwordEncoder->isPasswordValid($user, $password)) {
       return true;
     }
 
-    return FALSE;
+    return false;
   }
 
   protected function getLoginUrl() {
-    $this->router->generate('security_login');
+   return $this->router->generate('security_login');
   }
 
   protected function getDefaultSuccessRedirectUrl(){
 
-    return $this->router->generate('app_dashboard_index');
+    return $this->router->generate('homepage');
   }
 }
